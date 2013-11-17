@@ -104,6 +104,7 @@ Enjoy!
  
  import javax.swing.*;
  import java.swt.*;
+ import java.util.*;
  
  
  class n00624604{
@@ -152,10 +153,53 @@ class Prompt{
 //This class builds and checks a hashtable with linear probing
 class LinearHashChecker{	
 	
+	private int primelength;
+	
+	
+	LinearHashChecker(float loadfactor, float data){		
+		int length = Integer.parseInt(data/loadfactor); //loadfactor = data/length, length = data/loadfactor	
+		
+		while(!isPrime(length)){
+			++length;
+		}		
+		primelength = length;	
+	}
+	
+	
+	
+	public boolean isPrime(int x){
+		
+		int halfx = x/2;
+		boolean isprime = false;
+		
+		for(int i=2;i<=halfx<i++){
+			if(x%halfx==0){
+				isprime = true;
+			}
+		}
+		return(isprime);
+	}
+	
+	public int theoreticalAvg(int l){
+		
+		int theoavgu;
+		int theoavgs;
+		
+		//( 1 + 1/(1-L)**2)/2 (UNsuccessful) or (1+1/(1-L))/2 (successful)
+		
+	theoavgu = (1+1(1-l)**2)/2;
+	theoavgs = (1+1/(1-l))/2;
+		
+	}
+	
 }
 
 //THis class builds and checks a hashtable with quadradic probing
 class QuadradicHashChecker{
+
+public int length;
+public int loadfactor;
+
 	
 }
 
