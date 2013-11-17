@@ -151,28 +151,96 @@ class Prompt{
 class LinearHashChecker{	
 	
 	private int primelength;
+	private int[] array;
+	private int maxinserted;
+	private int maxsearched;
 	
-	
-	LinearHashChecker(float loadfactor, float data){		
-		int length = (int)(data/loadfactor); //loadfactor = data/length, length = data/loadfactor	
+	LinearHashChecker(float loadfactor, float data, int maxi, int maxs){
 		
+		maxinserted = maxi;
+		maxsearched = maxs;
+		
+		int length = (int)(data/loadfactor); //loadfactor = data/length, length = data/loadfactor, casts this length as an int
+		
+		
+		//increases length until it is a prime number
 		while(!isPrime(length)){
 			++length;
 		}		
-		primelength = length;	
+		primelength = length;	//this is put in a class variable
+		
+		array = new int[primelength];
+		
+		
+		//fill the array with the appropriate amount of random numbers
+		
+		
+		
+		//fill the array the specified amount with hashed random ints, handles collisions with linear probing
+		Random rand = new Random();
+		for(int i=0;i<data;i++){
+			
+			int x = rand.nextInt(maxinserted) + 1;
+			int index = hash(x, primelength);
+			
+			if(array[index] != 0){
+				index++;
+				index %= primelength;
+			}			
+			array[index] = x;			
+		}
+		
 	}
 	
+	//hash function, uses horners method to save cycles
+	public int hash(int x, int n){
+		
+		//find how many digits are in the number
+		String str = ""+x;		
+		int numdigits=str.length();
+		
+		//make an array, one spot for each digit		
+		int[] hornerarray = new int[numdigits];
+		
+		//reduce by 1
+		numdigits--;
+		
+		//find the number in each digit and put it into the array		
+		while(numdigits>=0){		
+			double z = Math.pow(10,numdigits);			
+			hornerarray[numdigits] = (x/(int)z);
+			x -= (z*hornerarray[numdigits]);
+			numdigits--;						
+		}		
+	
+		//finds hash value via horners polynomial method
+		int hashvalue=0;		
+		for(int h=(hornerarray.length-1);h>0;h--){
+			
+			int hold;
+			
+			if(h > (hornerarray.length))
+			hold=0;
+			
+			else{
+			hold = hornerarray[(h-1)];
+			}			
+			
+			hashvalue = (hashvalue+(hornerarray[h]*10 + hold)) % n;			
+		}	
+		return(hashvalue);
+	}
 	
 	
 	public boolean isPrime(int x){
 		
 		int halfx = x/2;
-		boolean isprime = false;
+		boolean isprime = true;
 		
 		for(int i=2;i<halfx;i++){
-			if(x%halfx==0){
-				isprime = true;
-			}
+			if(x % i == 0){
+				isprime = false;
+			}					
 		}
 		return(isprime);
 	}
@@ -192,25 +260,109 @@ class LinearHashChecker{
 //THis class builds and checks a hashtable with quadradic probing
 class QuadradicHashChecker{
 
-public int length;
-public int loadfactor;
-
+	private int primelength;
+	private int[] array;
+	private int maxinserted;
+	private int maxsearched;
 	
-}
-
-// this class contains a method for checking if an int is prime or not (may be expanded later)
-class Primes{
+	QuadradicHashChecker(float loadfactor, float data, int maxi, int maxs){
+		
+		maxinserted = maxi;
+		maxsearched = maxs;
+		
+		int length = (int)(data/loadfactor); //loadfactor = data/length, length = data/loadfactor, casts this length as an int
+		
+		
+		//increases length until it is a prime number
+		while(!isPrime(length)){
+			++length;
+		}		
+		primelength = length;	//this is put in a class variable
+		
+		array = new int[primelength];
+		
+		
+		//fill the array with the appropriate amount of random numbers
+		
+		
+		
+		//fill the array the specified amount with hashed random ints, handles collisions with linear probing
+		Random rand = new Random();
+		for(int i=0;i<data;i++){
+			
+			int x = rand.nextInt(maxinserted) + 1;
+			int index = hash(x, primelength);
+			
+			if(array[index] != 0){
+				index++;
+				index %= primelength;
+			}			
+			array[index] = x;			
+		}
+		
+	}
+	
+	//hash function, uses horners method to save cycles
+	public int hash(int x, int n){
+		
+		//find how many digits are in the number
+		String str = ""+x;		
+		int numdigits=str.length();
+		
+		//make an array, one spot for each digit		
+		int[] hornerarray = new int[numdigits];
+		
+		//reduce by 1
+		numdigits--;
+		
+		//find the number in each digit and put it into the array		
+		while(numdigits>=0){		
+			double z = Math.pow(10,numdigits);			
+			hornerarray[numdigits] = (x/(int)z);
+			x -= (z*hornerarray[numdigits]);
+			numdigits--;						
+		}		
+	
+		//finds hash value via horners polynomial method
+		int hashvalue=0;		
+		for(int h=(hornerarray.length-1);h>0;h--){
+			
+			int hold;
+			
+			if(h > (hornerarray.length))
+			hold=0;
+			
+			else{
+			hold = hornerarray[(h-1)];
+			}			
+			
+			hashvalue = (hashvalue+(hornerarray[h]*10 + hold)) % n;			
+		}	
+		return(hashvalue);
+	}
+	
+	
 	public boolean isPrime(int x){
 		
 		int halfx = x/2;
-		boolean isprime = false;
+		boolean isprime = true;
 		
 		for(int i=2;i<halfx;i++){
-			if(x%halfx==0){
-				isprime = true;
-			}
+			if(x % i == 0){
+				isprime = false;
+			}					
 		}
 		return(isprime);
+	}
+	
+	public void theoreticalAvg(int l){
+		
+		int theoavgu;
+		int theoavgs;
+		
+		//( 1 + 1/(1-L)**2)/2 (UNsuccessful) or (1+1/(1-L))/2 (successful)
+		
+		
 	}
 }
 
